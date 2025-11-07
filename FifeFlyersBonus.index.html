@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Després Contract Offer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom styling for the slider track */
+        input[type=range]::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, #2563eb 0%, #2563eb 33%, #dc2626 100%);
+            height: 8px;
+            border-radius: 4px;
+        }
+        input[type=range]::-moz-range-track {
+            background: linear-gradient(to right, #2563eb 0%, #2563eb 33%, #dc2626 100%);
+            height: 8px;
+            border-radius: 4px;
+        }
+        .data-card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease;
+        }
+        .data-card:hover {
+            transform: translateY(-2px);
+        }
+        .tier-label {
+            position: absolute;
+            top: -2.5rem;
+            left: 0;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-xl shadow-2xl border border-gray-100">
+
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-700">Fife Flyers Contract Offer: Simon Després</h1>
+            <p class="text-xl mt-2 text-gray-600 font-bold text-red-600">REVISED: Now Includes Total In-Game Revenue Share!</p>
+        </header>
+
+        <!-- Fixed Contract Details -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 text-center">
+            <div class="p-3 bg-blue-50 rounded-lg">
+                <p class="text-sm font-semibold text-gray-500">Term</p>
+                <p class="text-lg font-bold text-blue-800">Remainder of 2025-26 Season</p>
+            </div>
+            <div class="p-3 bg-blue-50 rounded-lg">
+                <p class="text-sm font-semibold text-gray-500">Fixed Base Salary (Optional)</p>
+                <p id="base-salary-display" class="text-lg font-bold text-blue-800">£11,000 (22 Weeks)</p>
+            </div>
+            <div class="p-3 bg-blue-50 rounded-lg">
+                <p class="text-sm font-semibold text-gray-500">Max Capacity</p>
+                <p class="text-lg font-bold text-blue-800">2,500 Paid Seats</p>
+            </div>
+        </div>
+
+        <!-- Attendance Slider -->
+        <div class="mb-12 p-6 border-4 border-gray-100 rounded-xl bg-gray-50">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Simulate Your Earnings</h2>
+            <p class="text-base text-gray-600 mb-6">Adjust the average paid attendance below to see your potential bonuses.</p>
+
+            <div class="flex justify-between items-center mb-3">
+                <label for="attendance-slider" class="text-lg font-semibold text-gray-700">Average Paid Attendance:</label>
+                <span id="attendance-value" class="text-2xl font-extrabold text-red-600 bg-red-100 px-3 py-1 rounded-lg">1,800</span>
+            </div>
+
+            <div class="relative pt-6">
+                <input type="range" id="attendance-slider" min="1000" max="2500" value="1800" step="100" class="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer">
+                
+                <!-- Tier Labels -->
+                <span class="tier-label left-[0%] text-blue-600 font-bold">1,000 (2.5% Tier)</span>
+                <span class="tier-label left-[66.6%] text-red-600 font-bold">2,500 (Max)</span>
+
+                <!-- Fixed marks for context -->
+                <div class="flex justify-between text-xs mt-1 text-gray-500 font-medium">
+                    <span class="w-1/6 text-left">1,000</span>
+                    <span class="w-1/6 text-center">1,250</span>
+                    <span class="w-1/6 text-center">1,500</span>
+                    <span class="w-1/6 text-center">1,750</span>
+                    <span class="w-1/6 text-center">2,000</span>
+                    <span class="w-1/6 text-center">2,250</span>
+                    <span class="w-1/6 text-right">2,500</span>
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-center space-x-4">
+                <label for="base-toggle" class="text-gray-700 font-medium">Include Optional Base Salary (£500/wk):</label>
+                <input type="checkbox" id="base-toggle" checked class="form-checkbox h-5 w-5 text-blue-600 rounded">
+            </div>
+        </div>
+
+
+        <!-- Results Display -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Your Projected Earnings</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <!-- Card 1: Per Game Bonus -->
+            <div class="data-card bg-white p-5 rounded-xl border-t-4 border-red-500">
+                <p class="text-sm font-semibold text-gray-500 uppercase">Bonus Pay per Game</p>
+                <p id="pay-per-game" class="text-3xl font-extrabold text-red-600 mt-1">£0</p>
+                <p class="text-xs text-gray-500 mt-2">Share of Total In-Game Revenue</p>
+            </div>
+            
+            <!-- Card 2: Total Season Bonus -->
+            <div class="data-card bg-white p-5 rounded-xl border-t-4 border-red-500">
+                <p class="text-sm font-semibold text-gray-500 uppercase">Total Bonus (22 Games)</p>
+                <p id="total-season-bonus" class="text-3xl font-extrabold text-red-600 mt-1">£0</p>
+                <p class="text-xs text-gray-500 mt-2">Performance-based potential</p>
+            </div>
+            
+            <!-- Card 3: Total Season Compensation -->
+            <div class="data-card bg-white p-5 rounded-xl border-t-4 border-blue-600">
+                <p class="text-sm font-semibold text-gray-500 uppercase">Total Compensation (Season)</p>
+                <p id="total-season-comp" class="text-3xl font-extrabold text-blue-700 mt-1">£0</p>
+                <p class="text-xs text-gray-500 mt-2">Bonus + Optional Base Salary</p>
+            </div>
+
+            <!-- Card 4: Team Revenue per Game -->
+            <div class="data-card bg-white p-5 rounded-xl border-t-4 border-gray-500">
+                <p class="text-sm font-semibold text-gray-500 uppercase">Total In-Game Revenue / Game</p>
+                <p id="total-revenue-per-game" class="text-3xl font-extrabold text-gray-700 mt-1">£0</p>
+                <p class="text-xs text-gray-500 mt-2">Ticket Sales + 18% Other Revenue</p>
+            </div>
+        </div>
+
+        <!-- Tier Summary -->
+        <div class="mt-10 p-5 bg-gray-100 rounded-xl">
+            <h3 class="text-xl font-bold text-gray-700 mb-3">Revenue Share Breakdown (Applies to Total In-Game Revenue)</h3>
+            <ul class="list-disc list-inside space-y-1 text-gray-600">
+                <li>**Tier 1 (Up to 1,000 paid attendees):** You earn **2.5%** of the *Total In-Game Revenue* generated by those tickets.</li>
+                <li>**Tier 2 (Above 1,000 paid attendees):** You earn **5.0%** of the *Total In-Game Revenue* on every ticket sold above the 1,000 mark.</li>
+                <li id="weekly-equivalent-note"></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        const TICKET_PRICE = 19;
+        const GAMES_REMAINING = 22;
+        const WEEKS_REMAINING = 22;
+        const BASE_WEEKLY_SALARY = 500;
+        const BASE_SEASON_SALARY = BASE_WEEKLY_SALARY * WEEKS_REMAINING; // £11,000
+        const BREAKPOINT_ATTENDANCE = 1000;
+        const RATE_BELOW_BP = 0.025; // 2.5%
+        const RATE_ABOVE_BP = 0.05; // 5.0%
+        const IN_GAME_MULTIPLIER = 1.18; // 100% Ticket Revenue + 18% Other Revenue
+
+        // Pre-calculate values for the breakpoint (1000 attendees)
+        const ticketRevBelowBP = BREAKPOINT_ATTENDANCE * TICKET_PRICE; // £19,000
+        const totalRevBelowBP = ticketRevBelowBP * IN_GAME_MULTIPLIER; // £22,420
+        const bonusBelowBP = totalRevBelowBP * RATE_BELOW_BP; // £560.50
+
+        // Get elements
+        const slider = document.getElementById('attendance-slider');
+        const attendanceValue = document.getElementById('attendance-value');
+        const baseToggle = document.getElementById('base-toggle');
+        const payPerGameEl = document.getElementById('pay-per-game');
+        const totalSeasonBonusEl = document.getElementById('total-season-bonus');
+        const totalSeasonCompEl = document.getElementById('total-season-comp');
+        const totalRevenuePerGameEl = document.getElementById('total-revenue-per-game');
+        const weeklyEquivalentNote = document.getElementById('weekly-equivalent-note');
+        const baseSalaryDisplay = document.getElementById('base-salary-display');
+
+        /**
+         * Calculates all contract metrics based on a given average attendance.
+         * @param {number} attendance - The average paid attendance.
+         * @returns {object} Calculated metrics.
+         */
+        function calculatePayout(attendance) {
+            let totalInGameRevenue = (attendance * TICKET_PRICE) * IN_GAME_MULTIPLIER;
+            let totalBonusPerGame = 0;
+
+            if (attendance <= BREAKPOINT_ATTENDANCE) {
+                // Tier 1 only (2.5% on all revenue up to this attendance)
+                totalBonusPerGame = totalInGameRevenue * RATE_BELOW_BP;
+            } else {
+                // Tier 1 (2.5% on the revenue from the first 1000 tickets)
+                totalBonusPerGame += bonusBelowBP;
+                
+                // Tier 2 (5.0% on the revenue generated by attendees above 1000)
+                const attendanceAboveBP = attendance - BREAKPOINT_ATTENDANCE;
+                const ticketRevAboveBP = attendanceAboveBP * TICKET_PRICE;
+                const totalRevAboveBP = ticketRevAboveBP * IN_GAME_MULTIPLIER;
+
+                const bonusAboveBP = totalRevAboveBP * RATE_ABOVE_BP;
+                totalBonusPerGame += bonusAboveBP;
+            }
+            
+            const totalSeasonBonus = totalBonusPerGame * GAMES_REMAINING;
+
+            let totalSeasonComp = totalSeasonBonus;
+            let baseSalaryText = '';
+            
+            // Add base salary if the toggle is checked
+            if (baseToggle.checked) {
+                totalSeasonComp += BASE_SEASON_SALARY;
+                baseSalaryText = ` (£11,000 Base)`;
+            }
+
+            return {
+                totalRevenue: totalInGameRevenue,
+                totalBonusPerGame,
+                totalSeasonBonus,
+                totalSeasonComp,
+                baseSalaryText
+            };
+        }
+
+        /**
+         * Formats a number as GBP currency.
+         * @param {number} amount 
+         * @returns {string} Formatted currency string.
+         */
+        function formatCurrency(amount) {
+            // Use Math.round to match the document's rounding style (£560.50 -> £561)
+            return new Intl.NumberFormat('en-GB', {
+                style: 'currency',
+                currency: 'GBP',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Math.round(amount));
+        }
+        
+        /**
+         * Updates the UI elements with the latest calculations.
+         */
+        function updateView() {
+            const attendance = parseInt(slider.value);
+            
+            attendanceValue.textContent = attendance.toLocaleString();
+            
+            const results = calculatePayout(attendance);
+
+            // Update Cards
+            payPerGameEl.textContent = formatCurrency(results.totalBonusPerGame);
+            totalSeasonBonusEl.textContent = formatCurrency(results.totalSeasonBonus);
+            totalSeasonCompEl.innerHTML = formatCurrency(results.totalSeasonComp) + 
+                                          (results.baseSalaryText ? `<span class="text-base font-normal text-gray-500">${results.baseSalaryText}</span>` : `<span class="text-base font-normal text-red-500">(Bonus Only)</span>`);
+            totalRevenuePerGameEl.textContent = formatCurrency(results.totalRevenue);
+
+            // Update optional base salary note
+            if (baseToggle.checked) {
+                 baseSalaryDisplay.textContent = '£11,000 (22 Weeks) - INCLUDED';
+                 baseSalaryDisplay.classList.remove('text-red-500');
+                 baseSalaryDisplay.classList.add('text-blue-800');
+            } else {
+                 baseSalaryDisplay.textContent = '£11,000 (22 Weeks) - EXCLUDED';
+                 baseSalaryDisplay.classList.remove('text-blue-800');
+                 baseSalaryDisplay.classList.add('text-red-500');
+            }
+
+
+            // Update weekly equivalent note
+            const weeklyEquivalent = results.totalSeasonBonus / WEEKS_REMAINING;
+            weeklyEquivalentNote.innerHTML = `Your **performance bonus** alone is the equivalent of a base salary of **${formatCurrency(weeklyEquivalent)}/week** at this attendance level.`;
+        }
+
+        // Initial view load
+        updateView();
+
+        // Event listeners
+        slider.addEventListener('input', updateView);
+        baseToggle.addEventListener('change', updateView);
+        
+    </script>
+</body>
+</html>
